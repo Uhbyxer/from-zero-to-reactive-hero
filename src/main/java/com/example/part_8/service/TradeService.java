@@ -14,7 +14,7 @@ public class TradeService {
             Flux<Map<String, Object>> input
     ) {
         // TODO: Add implementation to produce trading events
-        return Flux.never();
+        return input.filter(MessageMapper::isTradeMessageType).map(MessageMapper::mapToTradeMessage);
     }
 
 }

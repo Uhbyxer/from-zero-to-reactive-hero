@@ -4,9 +4,11 @@ import com.example.annotations.Complexity;
 import com.example.common.StringEventPublisher;
 import reactor.util.annotation.Nullable;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func0;
 import rx.schedulers.Schedulers;
 
+import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,7 +24,9 @@ public class Part1CreationTransformationTermination {
         // TODO: return "ABC" using Observable API
         // HINT: rx.Observable.just(T)
 
-        throw new RuntimeException("Not implemented");
+        return rx.Observable.just("ABC");
+
+//        throw new RuntimeException("Not implemented");
     }
 
     @Complexity(EASY)
@@ -30,21 +34,35 @@ public class Part1CreationTransformationTermination {
         // TODO: return Observable of input args
         // HINT: rx.Observable.from(T[])
 
-        throw new RuntimeException("Not implemented");
+        return rx.Observable.from(args);
+
+//        throw new RuntimeException("Not implemented");
     }
 
     @Complexity(EASY)
     public static Observable<String> error(Throwable t) {
         // TODO: return error Observable with given Throwable
 
-        throw new RuntimeException("Not implemented");
+        return rx.Observable.error(t);
+
+//        throw new RuntimeException("Not implemented");
     }
 
     @Complexity(EASY)
     public static Observable<Integer> convertNullableValueToObservable(@Nullable Integer nullableElement) {
         // TODO: return empty Observable if element is null otherwise return Observable from that element
 
-        throw new RuntimeException("Not implemented");
+        if (nullableElement == null) {
+            return rx.Observable.empty();
+        }
+        return rx.Observable.just(nullableElement);
+
+      //return Optional.of(nullableElement).map(x -> rx.Observable.just(x)).orElseGet(x -> Observable.<Integer>empty());
+
+//        return rx.Observable.;
+//        just(nullableElement);
+
+//        throw new RuntimeException("Not implemented");
     }
 
     @Complexity(EASY)
@@ -52,14 +70,17 @@ public class Part1CreationTransformationTermination {
         // TODO: return deferred Observable
         // HINT: rx.Observable.defer()
 
-        throw new RuntimeException("Not implemented");
+        return rx.Observable.defer(calculation);
+
+//        throw new RuntimeException("Not implemented");
     }
 
     @Complexity(EASY)
     public static Observable<Long> interval(long interval, TimeUnit timeUnit) {
         // TODO: return interval Observable
+        return rx.Observable.interval(interval, timeUnit);
 
-        throw new RuntimeException("Not implemented");
+//        throw new RuntimeException("Not implemented");
     }
 
     @Complexity(EASY)
@@ -67,7 +88,9 @@ public class Part1CreationTransformationTermination {
         // TODO: map to String;
         // HINT: Use String::valueOf or Object::toString as mapping function
 
-        throw new RuntimeException("Not implemented");
+        return input.map(String::valueOf);
+
+//        throw new RuntimeException("Not implemented");
     }
 
     @Complexity(EASY)
@@ -75,7 +98,9 @@ public class Part1CreationTransformationTermination {
         // TODO: filter strings
         // HINT: use String#startsWith
 
-        throw new RuntimeException("Not implemented");
+        return input.filter(s -> s.startsWith("ABC"));
+
+//        throw new RuntimeException("Not implemented");
     }
 
     @Complexity(MEDIUM)
@@ -84,13 +109,17 @@ public class Part1CreationTransformationTermination {
         // HINT: rx.Observable.from(java.util.concurrent.Future<? extends T>, rx.Scheduler)
         // HINT: for IO Scheduler take a look at rx.schedulers.Schedulers.*
 
-        throw new RuntimeException("Not implemented");
+        return rx.Observable.from(future, Schedulers.io());
+
+//        throw new RuntimeException("Not implemented");
     }
 
     @Complexity(MEDIUM)
     public static void iterateNTimes(int times, AtomicInteger counter) {
         // TODO: refactor using Observable#range and Observable#subscribe or Observable#doOnNext
-        throw new RuntimeException("Not implemented");
+//        throw new RuntimeException("Not implemented");
+
+        rx.Observable.range(0, times).subscribe(ignore -> counter.incrementAndGet());
     }
 
     @Complexity(HARD)
@@ -122,7 +151,11 @@ public class Part1CreationTransformationTermination {
         // TODO: adapt to Observable; consider Observable#unsafeCreate
         // HINT: combine eventPublisher.registerEventListener( with OnSubscribe::onNext )
 
-        throw new RuntimeException("Not implemented");
+//        throw new RuntimeException("Not implemented");
+        
+
+        return rx.Observable.unsafeCreate(subscriber -> eventPublisher.registerEventListener(subscriber::onNext)) ;
+        
     }
 
     @Complexity(MEDIUM)
@@ -132,6 +165,11 @@ public class Part1CreationTransformationTermination {
         // HINT: remind how to wrap array to Observable
         // HINT: consider string.charAt(0) for mapping one letter string to character
 
-        throw new RuntimeException("Not implemented");
+//        throw new RuntimeException("Not implemented");
+
+        return input.flatMap(s -> rx.Observable.from(s.split(""))).map(s -> s.charAt(0));
+
     }
+
+
 }

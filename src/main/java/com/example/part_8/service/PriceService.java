@@ -44,7 +44,7 @@ public class PriceService {
 
     // Visible for testing
     Flux<MessageDTO<Float>> currentPrice(Flux<Map<String, Object>> input) {
-        return Flux.never();
+        return input.map(MessageMapper::mapToPriceMessage);
     }
 
     // 1.1)   TODO Collect crypto currency price during the interval of seconds

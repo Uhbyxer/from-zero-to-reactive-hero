@@ -13,6 +13,7 @@ import reactor.ipc.netty.http.websocket.WebsocketInbound;
 import reactor.ipc.netty.http.websocket.WebsocketOutbound;
 
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import static com.example.part_8.utils.HttpResourceResolver.resourcePath;
@@ -70,7 +71,19 @@ public class Part8CryptoPlatform extends LoggerConfigurationTrait {
     public static Flux<Long> handleRequestedAveragePriceIntervalValue(Flux<String> requestedInterval) {
         // TODO: input may be incorrect, pass only correct interval
         // TODO: ignore invalid values (empty, non number, <= 0, > 60)
-        return Flux.never();
+
+        return requestedInterval.filter(s -> {
+            if (s == null || s.isEmpty()) {
+                return false;
+            }
+            try {
+                Long.valueOf(s);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+            return true;
+        })
+            .map(Long::valueOf).filter(aLong -> aLong > 0 && aLong <= 60);
     }
 
     // Visible for testing
@@ -79,7 +92,7 @@ public class Part8CryptoPlatform extends LoggerConfigurationTrait {
         // It is possible that writing data to output may be slower than rate of
         // incoming output data
 
-        return outgoingStream;
+        return outgoingStream.onBackpressureBuffer();
     }
 
 

@@ -32,12 +32,12 @@ public class CryptoConnectionHolder {
 
     // TODO: implement resilience such as retry with delay
     public static <T> Flux<T> provideResilience(Flux<T> input) {
-        return input;
+        return input.retry();
     }
 
 
     // TODO: implement caching of 3 last elements & multi subscribers support
     public static <T> Flux<T> provideCaching(Flux<T> input) {
-        return input;
+        return input.cache(3);
     }
 }
